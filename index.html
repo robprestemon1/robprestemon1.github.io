@@ -1,15 +1,31 @@
 <!doctype html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Thrilling Frontend Technical Challenge</title>
-  </head>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Thrilling Frontend Technical Challenge</title>
+	</head>
 
-  <body>
-    <h1>Thrilling Frontend Technical Challenge</h1>
+	<body>
+		<h1>Thrilling Frontend Technical Challenge</h1>
 
-    <script>
+		<script>
+			var request = new XMLHttpRequest();
 
-    </script>
-  </body>
+			request.open('GET', 'https://shopthrilling.com/collections/accessories?view=tech_challenge');
+
+			request.onload = function() {
+				if (this.status >= 200 && this.status < 400) {
+					console.log(this.response);
+				} else {
+					console.error(this);
+				}
+			};
+
+			request.onerror = function() {
+				console.error(this);
+			};
+
+			request.send();
+		</script>
+	</body>
 </html>
