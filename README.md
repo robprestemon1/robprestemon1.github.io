@@ -4,10 +4,10 @@
 
 This repository serves as a plain, forkable starting point for your frontend technical challenge.
 
-In this challenge you will create an interface that can search a collection of items and display relevant results. The items will be retrieved via a read-only API that will return a JSON feed of collection products. The feed can be accessed by appending the query parameter `?view=tech_challenge` to any collection page on the ShopThrilling site, for example:
+In this challenge you will create an interface that can search a collection of items and display relevant results. The items will be retrieved via a read-only API that will return a JSON feed of collection products. The feed can be accessed by appending the query parameter `?view=tech_challenge` to any collection page on the ShopThrilling site, for example:  
 <https://shopthrilling.com/collections/clothing?view=tech_challenge>
 
-The [index.html](./index.html) file within this repositiory provides a vanilla AJAX example of how to retrieve products. You can see this example running here:
+The [index.html](./index.html) file within this repositiory provides a vanilla AJAX example of how to retrieve products. You can see this example running here:  
 <https://shopthrilling.github.io/tech-challenge/>
 
 Your challenge solution should fulfill the following requirements:
