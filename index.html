@@ -11,32 +11,126 @@
 			body {
 				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Helvetica Neue", Arial, sans-serif;
 			}
+
+			#search-field-label {
+				display: block;
+			}
+
 		</style>
 	</head>
 
 	<body>
 		<h1>Thrilling Frontend Technical Challenge</h1>
 
-		<h2>Open your Developer Tools Console to view output.</h2>
+		<form>
+			<label for="search-field" id="search-field-label">Enter search term then press enter or click submit to search.</label>
+			<input type="text" placeholder="Enter Search Term" id="search-field" />
+			<input type="button" value="Search" id="search-button" />
+			<ul id="results-list"></ul>
+		</form>
 
 		<script>
-			var request = new XMLHttpRequest();
 
-			request.open('GET', 'https://api.nytimes.com/svc/topstories/v2/science.json?api-key=Gwxln5M3geWlhR6UE0TY1FUWKSG3wCil');
+			const resultsList = document.getElementById('results-list');
+			const searchField = document.getElementById('search-field');
+			const searchButton = document.getElementById('search-button');
 
-			request.onload = function() {
+			searchField.addEventListener('keydown', (event) => {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					const request = setupRequest();
+					request.send();
+				}
+			});
+
+			searchButton.addEventListener('click', (event) => {
+				event.preventDefault();
+
+				const request = setupRequest();
+				request.send();
+			});
+
+
+			function setupRequest () {
+				const request = new XMLHttpRequest();
+
+				request.open('GET', 'https://api.nytimes.com/svc/topstories/v2/science.json?api-key=Gwxln5M3geWlhR6UE0TY1FUWKSG3wCil');
+
+				request.onload = handleResponse;
+
+				request.onerror = function() {
+					console.error(this);
+				};
+
+				return request;
+			}
+
+			function handleResponse () {
+
 				if (this.status >= 200 && this.status < 400) {
-					console.log(JSON.parse(this.response));
+					const parsedResponse = JSON.parse(this.response);
+					if (parsedResponse.results && Array.isArray(parsedResponse.results)) {
+
+						while (resultsList.firstChild) {
+							resultsList.removeChild(resultsList.firstChild);
+						}
+
+						const searchInput = searchField.value.split(' ');
+						let matchedResults = [];
+
+						parsedResponse.results.forEach((item) => {
+							const searchableText = `${item.title} ${item.byline} ${item.section}`.toLowerCase();
+							let match = false;
+							let relevance = 0;
+
+							if (searchInput.length > 0 && searchInput[0] !== '') {
+								searchInput.forEach((searchWord) => {
+									const pattern = new RegExp(`${searchWord}`, 'g');
+									const matches = searchableText.match(pattern);
+
+									if (searchWord !== '' && matches && matches.length > 0) {
+										match = true;
+										relevance += matches.length;
+									}
+								});
+							}
+							else {
+								match = true;
+							}
+
+							if (match) {
+								const matchedArticle = {
+									title: item.title,
+									url: item.url,
+									byline: item.byline,
+									relevance: relevance,
+								};
+
+								matchedResults.push(matchedArticle);
+							}
+
+							matchedResults.sort((article1, article2) => (article1.relevance < article2.relevance) ? 1 : -1);
+						});
+
+						matchedResults.forEach((item) => {
+							const link = document.createElement('a');
+							link.setAttribute('href', item.url);
+							link.setAttribute('target', '_blank');
+							link.appendChild(document.createTextNode(item.title));
+
+							const listItem = document.createElement('li');
+							listItem.appendChild(document.createTextNode(`${item.relevance}: `));
+							listItem.appendChild(link);
+							listItem.appendChild(document.createTextNode(` - ${item.byline}`));
+
+							resultsList.appendChild(listItem);
+						});
+
+					}
 				} else {
 					console.error(this);
 				}
-			};
-
-			request.onerror = function() {
-				console.error(this);
-			};
-
-			request.send();
+			}
 		</script>
 	</body>
 </html>
