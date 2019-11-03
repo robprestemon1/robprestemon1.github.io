@@ -16,24 +16,63 @@
 				display: block;
 			}
 
+			.container {
+				max-width: 1028px;
+				margin: 0 auto;
+			}
+
+			.page-title, .search-form {
+				text-align: center;
+			}
+
+			.article-image {
+				height: 127px;
+				width: 190px;
+				flex: 1;
+			}
+
+			.text-container {
+				flex: 3;
+				margin-left: 1em;
+			}
+
+			.result-item {
+				display: flex;
+				margin: 2em;
+				padding: 1em;
+				border: 2px solid rgba(0, 0, 0, .5);
+			}
+
+			#search-field, #search-button {
+				height: 2em;
+				font-size: 18px;
+			}
+
+			#search-button {
+				margin-left: 1em;
+				display: inline-block;
+			}
+
 		</style>
 	</head>
 
 	<body>
-		<h1>Thrilling Frontend Technical Challenge</h1>
+		<div class="container">
+			<h1 class="page-title">Thrilling Frontend Technical Challenge</h1>
 
-		<form>
-			<label for="search-field" id="search-field-label">Enter search term then press enter or click submit to search.</label>
-			<input type="text" placeholder="Enter Search Term" id="search-field" />
-			<input type="button" value="Search" id="search-button" />
-			<ul id="results-list"></ul>
-		</form>
+			<form class="search-form">
+				<input type="text" placeholder="Enter Search Term" id="search-field" />
+				<input type="button" value="Search" id="search-button" />
+			</form>
+
+			<div id="results-list"></div>
+		</div>
 
 		<script>
 
-			const resultsList = document.getElementById('results-list');
-			const searchField = document.getElementById('search-field');
-			const searchButton = document.getElementById('search-button');
+			const resultsList = document.querySelector('#results-list');
+			const searchField = document.querySelector('#search-field');
+			const searchButton = document.querySelector('#search-button');
 
 			searchField.addEventListener('keydown', (event) => {
 				if (event.keyCode === 13) {
@@ -99,11 +138,16 @@
 							}
 
 							if (match) {
+								const imageData = item.multimedia.find((element) => {
+									return element.format === 'Normal';
+								});
+
 								const matchedArticle = {
 									title: item.title,
 									url: item.url,
 									byline: item.byline,
 									relevance: relevance,
+									image: imageData.url,
 								};
 
 								matchedResults.push(matchedArticle);
@@ -112,18 +156,34 @@
 							matchedResults.sort((article1, article2) => (article1.relevance < article2.relevance) ? 1 : -1);
 						});
 
-						matchedResults.forEach((item) => {
+						matchedResults.forEach((item, index) => {
 							const link = document.createElement('a');
 							link.setAttribute('href', item.url);
 							link.setAttribute('target', '_blank');
 							link.appendChild(document.createTextNode(item.title));
 
-							const listItem = document.createElement('li');
-							listItem.appendChild(document.createTextNode(`${item.relevance}: `));
-							listItem.appendChild(link);
-							listItem.appendChild(document.createTextNode(` - ${item.byline}`));
+							const image = document.createElement('img');
+							image.setAttribute('class', 'article-image');
+							image.setAttribute('src', item.image);
+							image.setAttribute('height', '127');
+							image.setAttribute('width', '190');
 
-							resultsList.appendChild(listItem);
+							const textContainer = document.createElement('div');
+							textContainer.setAttribute('class', 'text-container');
+							textContainer.appendChild(link);
+
+							const byLine = document.createElement('p');
+							byLine.appendChild(document.createTextNode(item.byline));
+							textContainer.appendChild(byLine);
+
+							const itemId = `article-${index}`;
+							const resultItem = document.createElement('div');
+							resultItem.setAttribute('class', 'result-item');
+							resultItem.setAttribute('id', itemId);
+							resultItem.appendChild(image);
+							resultItem.appendChild(textContainer);
+
+							resultsList.appendChild(resultItem);
 						});
 
 					}
