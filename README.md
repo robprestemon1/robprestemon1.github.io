@@ -6,7 +6,7 @@ This repository serves as a plain, forkable starting point for your frontend tec
 
 In this challenge you will create an interface that can search through a list of items and display relevant results. The items will be retrieved via a read-only API that will return a JSON feed of the [most popular New York Times science articles](https://api.nytimes.com/svc/topstories/v2/science.json?api-key=Gwxln5M3geWlhR6UE0TY1FUWKSG3wCil).
 
-The [index.html](./index.html) file within this repositiory provides a vanilla AJAX example of how to retrieve articles. You can see this example running here:
+The [index.html](./index.html) file within this repositiory provides a vanilla AJAX example of how to retrieve articles. You can see this example running here:  
 <https://shopthrilling.github.io/tech-challenge/>
 
 Your challenge solution should aim to fulfill the following:
