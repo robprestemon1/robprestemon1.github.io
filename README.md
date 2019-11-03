@@ -6,7 +6,7 @@ This repository serves as a plain, forkable starting point for your frontend tec
 
 In this challenge you will create an interface that can search through a list of items and display relevant results. The items will be retrieved via a read-only API that will return a JSON feed of the [most popular New York Times science articles](https://api.nytimes.com/svc/topstories/v2/science.json?api-key=Gwxln5M3geWlhR6UE0TY1FUWKSG3wCil).
 
-The [index.html](./index.html) file within this repositiory provides a vanilla AJAX example of how to retrieve articles. You can see this example running here:  
+The [index.html](./index.html) file within this repository provides a vanilla AJAX example of how to retrieve articles. You can see this example running here:  
 <https://shopthrilling.github.io/tech-challenge/>
 
 Your challenge solution should aim to fulfill the following:
@@ -17,9 +17,9 @@ Your challenge solution should aim to fulfill the following:
     - section
     - byline
   - Search terms should be case insensitive.
-    - e.g. the search term "kenneth chang" should return an article with the byline "KENNETH CHANG".
+    - e.g. the search term "kenneth chang" should return an article with the byline "KENNETH CHANG"
   - Search terms should match regardless of the order they are entered.
-    - e.g. the search terms "meat growing" or "lab mush" should both return an article with the title "Growing Meat in a Lab That Doesn’t Look Like Mush".
+    - e.g. the search terms "meat growing" or "lab mush" should return an article with the title "Growing Meat in a Lab That Doesn’t Look Like Mush"
 
 In addition to the requirements above you can choose from the following additional features to implememnt if time permits:
 - Sort results by relevance.
