@@ -85,7 +85,7 @@
 
 							if (searchInput.length > 0 && searchInput[0] !== '') {
 								searchInput.forEach((searchWord) => {
-									const pattern = new RegExp(`${searchWord}`, 'g');
+									const pattern = new RegExp(searchWord, 'g');
 									const matches = searchableText.match(pattern);
 
 									if (searchWord !== '' && matches && matches.length > 0) {
