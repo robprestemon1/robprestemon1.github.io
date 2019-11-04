@@ -110,25 +110,34 @@
 					const parsedResponse = JSON.parse(this.response);
 					if (parsedResponse.results && Array.isArray(parsedResponse.results)) {
 
+						// remove existing children from results
 						while (resultsList.firstChild) {
 							resultsList.removeChild(resultsList.firstChild);
 						}
 
+						// split search input into array so order doesn't matter
 						const searchInput = searchField.value.split(' ');
 						let matchedResults = [];
 
 						parsedResponse.results.forEach((item) => {
+							// combine all searchable fields into one block of text
 							const searchableText = `${item.title} ${item.byline} ${item.section}`.toLowerCase();
 							let match = false;
 							let relevance = 0;
 
+							// ignore blank spaces in search input
 							if (searchInput.length > 0 && searchInput[0] !== '') {
 								searchInput.forEach((searchWord) => {
+
+									// basic regex search pattern so we match parts of words as well
+									// e.g. chan would work for change
 									const pattern = new RegExp(searchWord, 'g');
 									const matches = searchableText.match(pattern);
 
 									if (searchWord !== '' && matches && matches.length > 0) {
 										match = true;
+
+										// basic relevance based on number of matches we get per searchable text
 										relevance += matches.length;
 									}
 								});
@@ -138,22 +147,28 @@
 							}
 
 							if (match) {
+
+								// get the image keyed as Normal in the API response
 								const imageData = item.multimedia.find((element) => {
 									return element.format === 'Normal';
 								});
 
+								// pass along relevant data for results
 								const matchedArticle = {
 									title: item.title,
 									url: item.url,
 									byline: item.byline,
 									relevance: relevance,
-									image: imageData.url,
+									image: imageData !== undefined ? imageData.url : 'https://via.placeholder.com/300',
 								};
 
 								matchedResults.push(matchedArticle);
 							}
 
-							matchedResults.sort((article1, article2) => (article1.relevance < article2.relevance) ? 1 : -1);
+							if (Array.isArray(matchedResults) && matchedResults.length > 0) {
+								matchedResults.sort((article1, article2) => (article1.relevance < article2.relevance) ? 1 : -1);
+							}
+
 						});
 
 						matchedResults.forEach((item, index) => {
